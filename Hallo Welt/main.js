@@ -1,20 +1,15 @@
 "use strict";
 
-console.log("hallo welt");
-const minalter = 18;
-let alter = prompt('alter eingeben:');
-let msg = 'zu jung';
 
-if( parseInt( alter ) > minalter  ) {
-    msg = 'alt genug';
-} 
-else if ( parseInt( alter ) === minalter ) {
-    msg = 'grade so ...';
+const pleaseSplit = function ( users) {
+    let intr = users.split(",");
+    let resp = intr.map( (x) => { return { 'email' : x.trim() } } );
+    return resp;
 }
 
-const meine_func = function (){
-    console.log("hallo Func");
-};
+let users = 'dsfv@sdv.de, vrvwe@srvre.sfv';
 
-console.log(msg);
-meine_func();
+let oUsers = pleaseSplit(users);
+
+console.log(users);
+console.log(oUsers);
