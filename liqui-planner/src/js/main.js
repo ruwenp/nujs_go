@@ -1,34 +1,55 @@
 "use strict";
 
-let einnahmen = 0;
-let ausgaben = 0;
+let hhb = {
+	einnahmen: 0,
+	ausgaben: 0,
+	bilanz: 0,
+	new_in: {
+		titel: "",
+		typ: "Ausgabe",
+		betrag: 0,
+		datum: ""
+	},
+	
+	calculus(){
+    		if ( ['Einnahme', 'E', 'e'].includes( this.new_in.type ) ) {
+        		this.einnahmen += parseInt(this.new_in.betrag);
+        		this.bilanz += parseInt(this.new_in.betrag);
+    		} else {
+        		this.ausgaben += parseInt(this.new_in.betrag);
+        		this.bilanz -= parseInt(this.new_in.betrag);
+    		}
+	},
 
-while (true) {
-    let titel = prompt("Titel");
-    let type = prompt("Type: Einnahme/Ausgabe");
-    let betrag = prompt("Betrag");
-    let datum = prompt("Datum", "JAHR-MM-TT");
+	workflow(){
+  		this.my_prompt();
+		console.log( this.my_output() );
+		this.calculus();
+	},
 
-    console.log( `
-        titel: ${titel} 
-        type: ${type} 
-        Betrag: ${betrag} 
-        datum: ${datum}
-    `);
+	my_prompt() {
+    		this.new_in.titel = prompt("Titel");
+    		this.new_in.type = prompt("Type: Einnahme/Ausgabe");
+    		this.new_in.betrag = prompt("Betrag");
+    		this.new_in.datum = prompt("Datum", "JAHR-MM-TT");
+		this.calculus();
+	},
+	
+	my_output(){
+		return `
+		titel: ${this.new_in.titel} 
+        	type: ${this.new_in.type} 
+        	betrag: ${this.new_in.betrag} 
+        	datum: ${this.new_in.datum}`;
+	}
+};
 
-    if ( type === 'Einnahme' ) {
-        einnahmen += parseInt(betrag);
-    } else {
-        ausgaben += parseInt(betrag);
-    }
-
-    let mehr_input_frage = prompt("Noch eine Angabe? j/n");
-    if ( mehr_input_frage !== 'j' ) {
-        break;
-    }
-
+while (true) { 
+	hhb.workflow();
+      	let mehr_input_frage = prompt("Noch eine Angabe? j/n");
+    	if ( mehr_input_frage !== 'j' ) {
+        	break;
+    	}
 }
 
-let bilanz = einnahmen - ausgaben;
-
-console.log( `Einnahmen: ${einnahmen} - Ausgaben: ${ausgaben} = ${bilanz}`);
+console.log( `Einnahmen: ${hhb.einnahmen} - Ausgaben: ${hhb.ausgaben} = ${hhb.bilanz}`);
