@@ -1,55 +1,60 @@
 "use strict";
 
-let hhb = {
-	einnahmen: 0,
-	ausgaben: 0,
-	bilanz: 0,
-	new_in: {
-		titel: "",
-		typ: "Ausgabe",
-		betrag: 0,
-		datum: ""
-	},
+let haushaltsbuch = {
 	
-	calculus(){
-    		if ( ['Einnahme', 'E', 'e'].includes( this.new_in.type ) ) {
-        		this.einnahmen += parseInt(this.new_in.betrag);
-        		this.bilanz += parseInt(this.new_in.betrag);
-    		} else {
-        		this.ausgaben += parseInt(this.new_in.betrag);
-        		this.bilanz -= parseInt(this.new_in.betrag);
-    		}
+	gesamtbilanz : {
+		einnahmen: 0,
+		ausgaben: 0,
+		bilanz: 0
 	},
 
-	workflow(){
-  		this.my_prompt();
-		console.log( this.my_output() );
-		this.calculus();
+	eintraege : [],
+
+	calculus() {
+		this.eintraege.forEach(function(i){
+			if ( ['Einnahme', 'E', 'e'].includes( i.type ) ) {
+        			this.gesamtbilanz.einnahmen += parseInt(i.betrag);
+        			this.gesamtbilanzbilanz += parseInt(i.betrag);
+    			} else {
+        			this.gesamzbilanz.ausgaben += parseInt(i.betrag);
+        			this.gesamtbilanz.bilanz -= parseInt(i.betrag);
+    			}
+		});
 	},
 
-	my_prompt() {
-    		this.new_in.titel = prompt("Titel");
-    		this.new_in.type = prompt("Type: Einnahme/Ausgabe");
-    		this.new_in.betrag = prompt("Betrag");
-    		this.new_in.datum = prompt("Datum", "JAHR-MM-TT");
-		this.calculus();
+	eintrag_erfassen() {
+		this.eintraege.push({
+			titel: prompt("Titel"),
+			type: prompt("Type: Einnahme/Ausgabe"),
+			betrag: prompt("Betrag"),
+			datum: prompt("Datum", "JAHR-MM-TT")
+		});
 	},
 	
-	my_output(){
-		return `
-		titel: ${this.new_in.titel} 
-        	type: ${this.new_in.type} 
-        	betrag: ${this.new_in.betrag} 
-        	datum: ${this.new_in.datum}`;
+	eintraege_ausgeben(){
+		this.eintraege.forEach( function(e) {
+			let ki = this.eintraege[e].keys();
+			ki.forEach( function(k) {
+				console.log( `${k}: ${this.eintraege[e][k]}` ); 
+			})
+		})
+	},
+
+	eintrag_hinzufuegen(){
+		this.eintrag_erfassen();
+		this.eintraege_ausgeben();
 	}
 };
 
 while (true) { 
-	hhb.workflow();
+	haushaltsbuch.eintrag_hinzufuegen();
       	let mehr_input_frage = prompt("Noch eine Angabe? j/n");
     	if ( mehr_input_frage !== 'j' ) {
         	break;
     	}
 }
 
-console.log( `Einnahmen: ${hhb.einnahmen} - Ausgaben: ${hhb.ausgaben} = ${hhb.bilanz}`);
+haushaltsbuch.calculus();
+haushaltsbuch.eintraege_ausgeben();
+
+// console.log( `Einnahmen: ${haushaltsbuch.einnahmen} - Ausgaben: ${haushaltsbuch.ausgaben} = ${haushaltsbuch.bilanz}`);
