@@ -49,8 +49,9 @@ let haushaltsbuch = {
 		let neuer_eintrag = new Map();
 		neuer_eintrag.set('titel', prompt("Titel"));
 		neuer_eintrag.set('typ', prompt("Typ: Einnahme/Ausgabe"));
-		neuer_eintrag.set('betrag', prompt("Betrag"));
-		neuer_eintrag.set('datum', prompt("Datum", "JAHR-MM-TT"));
+		neuer_eintrag.set('betrag', prompt("Betrag"));		
+		neuer_eintrag.set('datum', new Date(prompt("Datum", "JAHR-MM-TT")));
+		neuer_eintrag.set('timestamp', Date.now() );
 
 		this.eintraege.push(neuer_eintrag);
 		this.eintrage_sortieren();
@@ -78,9 +79,14 @@ let haushaltsbuch = {
 	eintraege_ausgeben(){
 		console.clear();
 		this.eintraege.forEach( function(e) {
-			let ki = ['betrag', 'datum', 'titel', 'typ']; 
+			let ki = ['betrag', 'datum', 'titel', 'typ', 'timestamp']; 
 			ki.forEach( function(k) {
-				console.log( `${k}: ${e.get(k)}` ); 
+				if ( k === 'datum') {
+					console.log( `${k}: ${ e.get(k).toLocaleDateString("de-DE", { 
+						year: 'numeric', month: '2-digit', day: '2-digit'}) }` );
+				} else {
+					console.log( `${k}: ${e.get(k)}` );
+				} 
 			})
 		});
 	}		

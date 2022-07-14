@@ -1,15 +1,7 @@
 "use strict";
 
+let d = new Date();
 
-const pleaseSplit = function ( users) {
-    let intr = users.split(",");
-    let resp = intr.map( (x) => { return { 'email' : x.trim() } } );
-    return resp;
-}
+console.log(d);
 
-let users = 'dsfv@sdv.de, vrvwe@srvre.sfv';
-
-let oUsers = pleaseSplit(users);
-
-console.log(users);
-console.log(oUsers);
+console.log(Date.now());
