@@ -2,27 +2,26 @@
 
 let haushaltsbuch = {
 	
-	gesamtbilanz : {
-		einnahmen: 0,
-		ausgaben: 0,
-		bilanz: 0
-	},
+	gesamtbilanz : new Map(),
 
 	eintraege : [],
 
 	gesamtbilanz_erstellen() {
-		let neue_gesamtbilanz = { einnahmen : 0, ausgaben : 0, bilanz : 0 };
+		let neue_gesamtbilanz = new Map();
+		neue_gesamtbilanz.set('einnahmen', 0);
+		neue_gesamtbilanz.set('ausgaben', 0);
+		neue_gesamtbilanz.set('bilanz', 0);
 
 		this.eintraege.forEach(function(i){
 			
 			// console.log(i);
 
-			if ( ['Einnahme', 'E', 'e'].includes( i.type ) ) {
-        		neue_gesamtbilanz.einnahmen += parseInt(i.betrag);
-        		neue_gesamtbilanz.bilanz += parseInt(i.betrag);
+			if ( ['Einnahme', 'E', 'e'].includes( i.get('typ') ) ) {
+        		neue_gesamtbilanz.set('einnahmen', ( neue_gesamtbilanz.get('einnahmen') + parseInt(i.get('betrag')) ));
+        		neue_gesamtbilanz.set('bilanz', (neue_gesamtbilanz.get('bilanz') + parseInt(i.get('betrag')) ));
     		} else {
-        		neue_gesamtbilanz.ausgaben += parseInt(i.betrag);
-        		neue_gesamtbilanz.bilanz -= parseInt(i.betrag);
+        		neue_gesamtbilanz.set('ausgaben', (neue_gesamtbilanz.get('ausgaben') + parseInt(i.get('betrag')) ));
+        		neue_gesamtbilanz.set('bilanz', (neue_gesamtbilanz.get('bilanz') - parseInt(i.get('betrag')) ));
     		}
 		});
 
@@ -32,10 +31,10 @@ let haushaltsbuch = {
 
 	eintrage_sortieren() {
 		let sortierte_eintraege = this.eintraege.sort( function(a,b) {
-			if ( a.datum < b.datum ) {
+			if ( a.get('datum') < b.get('datum') ) {
 				return 1;
 			} 
-			else if ( a.datum > b.datum ) {
+			else if ( a.get('datum') > b.get('datum') ) {
 				return -1;
 			} 
 			else {
@@ -47,21 +46,21 @@ let haushaltsbuch = {
 	},
 
 	eintrag_erfassen() {
-		this.eintraege.push({
-			titel: prompt("Titel"),
-			type: prompt("Type: Einnahme/Ausgabe"),
-			betrag: prompt("Betrag"),
-			datum: prompt("Datum", "JAHR-MM-TT")
-		});
+		let neuer_eintrag = new Map();
+		neuer_eintrag.set('titel', prompt("Titel"));
+		neuer_eintrag.set('typ', prompt("Typ: Einnahme/Ausgabe"));
+		neuer_eintrag.set('betrag', prompt("Betrag"));
+		neuer_eintrag.set('datum', prompt("Datum", "JAHR-MM-TT"));
 
+		this.eintraege.push(neuer_eintrag);
 		this.eintrage_sortieren();
 	},
 
 	gesamtbilanz_ausgeben(){
-		console.log(`Einnahmen: ${this.gesamtbilanz.einnahmen} \n`
-			+ `Ausgaben: ${this.gesamtbilanz.ausgaben} \n` 
-			+ `Bilanz: ${this.gesamtbilanz.bilanz} \n` 
-			+ `Bilanz ist positiv: ${this.gesamtbilanz.bilanz >= 0}`
+		console.log(`Einnahmen: ${this.gesamtbilanz.get('einnahmen')} \n`
+			+ `Ausgaben: ${this.gesamtbilanz.get('ausgaben')} \n` 
+			+ `Bilanz: ${this.gesamtbilanz.get('bilanz')} \n` 
+			+ `Bilanz ist positiv: ${this.gesamtbilanz.get('bilanz') >= 0}`
 			)
 	},
 
@@ -79,9 +78,9 @@ let haushaltsbuch = {
 	eintraege_ausgeben(){
 		console.clear();
 		this.eintraege.forEach( function(e) {
-			let ki = ['betrag', 'datum', 'titel', 'type']; 
+			let ki = ['betrag', 'datum', 'titel', 'typ']; 
 			ki.forEach( function(k) {
-				console.log( `${k}: ${e[k]}` ); 
+				console.log( `${k}: ${e.get(k)}` ); 
 			})
 		});
 	}		
