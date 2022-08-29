@@ -9,7 +9,7 @@ let haushaltsbuch = {
 	fehler: [],
 
 	eintrage_sortieren() {
-		let sortierte_eintraege = this.eintraege.sort( function(a,b) {
+		let sortierte_eintraege = this.eintraege.sort( (a,b) => {
 			if ( a.get('datum') < b.get('datum') ) {
 				return 1;
 			} 
@@ -31,8 +31,6 @@ let haushaltsbuch = {
 		neuer_eintrag.set('betrag', this.betrag_verarbeiten(prompt("Betrag in Euro")));		
 		neuer_eintrag.set('datum', this.datum_verarbeiten(prompt("Datum", "JAHR-MM-TT")));
 		neuer_eintrag.set('timestamp', Date.now() );
-
-		console.clear();
 
 		if ( this.fehler.length > 0 ) {
 			console.log(this.fehler);			
@@ -162,9 +160,7 @@ let haushaltsbuch = {
 	},
 
 	gesamtbilanz_anzeigen(){
-		document.querySelectorAll("#gesamtbilanz > div").forEach( function(al){
-			al.remove('div')
-		});		
+		document.querySelectorAll("#gesamtbilanz > div").forEach( (al) => al.remove('div') );		
 		this.html_gesamtbilanz_generieren();		
 	},
 
@@ -219,18 +215,13 @@ let haushaltsbuch = {
 
 	eintraege_anzeigen() {
 		// ul löschen, falls vorhanden
-		document.querySelectorAll(".monatsliste ul").forEach( function(al){
-			al.remove('ul')
-		});
+		document.querySelectorAll(".monatsliste ul").forEach( (al) => al.remove('ul') );
 
 		// ul anlegen
 		let ul = document.createElement("ul");
 
-		// this.eintraege.forEach( function(e){
-		for ( let e of this.eintraege ) {
-			ul.appendChild(this.html_eintrag_generieren(e));
-		}
-
+		this.eintraege.forEach( e => ul.appendChild(this.html_eintrag_generieren(e)) );
+ 
 		// ul in article.monatsliste einsetzen
 		let ele = document.querySelector(".monatsliste");	
 		ele.appendChild(ul);
@@ -242,7 +233,7 @@ let haushaltsbuch = {
 		neue_gesamtbilanz.set('ausgaben', 0);
 		neue_gesamtbilanz.set('bilanz', 0);
 
-		this.eintraege.forEach(function(i){
+		this.eintraege.forEach((i) => {
 
 			if ( i.get('typ') === 'Einnahme' ) {
         		neue_gesamtbilanz.set('einnahmen', ( neue_gesamtbilanz.get('einnahmen') + parseInt(i.get('betrag')) ));
